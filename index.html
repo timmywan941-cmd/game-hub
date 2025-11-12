@@ -6,7 +6,31 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>My Game Hub</h1>
-  <p>This is my very first GitHub website!</p>
+  <header class="header">
+    <h1>My Game Hub</h1>
+    <input id="search" type="text" placeholder="Search games...">
+  </header>
+
+  <main class="layout">
+    <!-- Left: game list -->
+    <section class="game-list" id="game-list">
+
+      <!-- Test Game -->
+      <div class="game-card" data-title="Test Game" data-tags="test demo">
+        <h2>Test Game</h2>
+        <button class="play-btn" data-url="game1.html">
+          Play
+        </button>
+      </div>
+
+    </section>
+
+    <!-- Right: iframe viewer -->
+    <section class="viewer">
+      <iframe id="game-frame" src="" frameborder="0" allowfullscreen></iframe>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
 </body>
 </html>
