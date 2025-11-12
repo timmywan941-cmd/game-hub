@@ -1,15 +1,13 @@
-// Load selected game in iframe
 const buttons = document.querySelectorAll('.play-btn');
 const frame = document.getElementById('game-frame');
 
 buttons.forEach(btn => {
   btn.addEventListener('click', () => {
     const url = btn.dataset.url;
-    frame.src = url; // load game1.html in the iframe
+    frame.src = url;
   });
 });
 
-// Simple search filter (only 1 game now but works when you add more)
 const searchInput = document.getElementById('search');
 const cards = document.querySelectorAll('.game-card');
 
