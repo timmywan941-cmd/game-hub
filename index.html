@@ -2,11 +2,124 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>My Game Hub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neon Arcade | Unblocked Games Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
 </head>
 <body>
-  <h1>My Game Hub</h1>
-  <p>This is my very first GitHub website!</p>
+  <header class="hero">
+    <div class="hero-content">
+      <p class="eyebrow">Works on school Wi-Fi, Google Sites, and offline</p>
+      <h1>Neon Arcade</h1>
+      <p class="lead">A tiny bundle of distraction-free HTML5 mini games that you can drop into Google Sites without any extra hosting. Pick a title, tap play, and the canvas-based games run instantly in the browser.</p>
+      <div class="hero-actions">
+        <button class="primary" data-random>Play a random game</button>
+        <a class="ghost" href="#game-library">Browse the library</a>
+      </div>
+      <ul class="hero-highlights">
+        <li>Keyboard friendly</li>
+        <li>Offline-ready</li>
+        <li>No ads or trackers</li>
+      </ul>
+    </div>
+  </header>
+
+  <main>
+    <section class="status-panel">
+      <article>
+        <h2>Drop it into Google Sites</h2>
+        <p>Copy these three files (index.html, style.css, script.js) into an Embed &gt; HTML block and you will get the exact layout you see here. Every asset is bundled, so there are no external scripts that can be blocked.</p>
+        <ol>
+          <li>Open your Google Site and choose <strong>Insert → Embed → Embed Code</strong>.</li>
+          <li>Paste the HTML from this project or upload the three files as a mini site.</li>
+          <li>Publish — the games stay unblocked because they are pure canvas + JavaScript.</li>
+        </ol>
+      </article>
+      <article>
+        <h2>Why it stays unblocked</h2>
+        <ul>
+          <li>Zero network calls once loaded.</li>
+          <li>All logic is inside <code>script.js</code>, so nothing pings a third-party server.</li>
+          <li>Small footprint (under 100 KB) keeps pages snappy even on low-power Chromebooks.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="game-library" id="game-library">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Hand-built mini games</p>
+          <h2>Pick your challenge</h2>
+          <p class="muted">Search for a vibe, then launch a distraction-free game inside the modal arcade.</p>
+        </div>
+        <div class="toolbar">
+          <label class="search">
+            <span class="sr-only">Search games</span>
+            <input id="searchInput" type="search" placeholder="Search by name, difficulty, or tag…">
+          </label>
+          <button class="icon" id="randomGameBtn" title="Launch a surprise game" aria-label="Launch a random game">
+            <span>🎲</span>
+          </button>
+        </div>
+      </div>
+      <div class="game-grid" id="gameGrid"></div>
+      <p class="result-meta"><span id="resultCount">0</span> game(s) loaded · tap any card to play.</p>
+    </section>
+
+    <section class="how-to">
+      <div>
+        <h3>Customization tips</h3>
+        <p>Change the accent colors in <code>style.css</code>, update the copy in <code>index.html</code>, or add new entries to the <code>games</code> array inside <code>script.js</code>. The layout automatically updates the card grid, modal, and search.</p>
+      </div>
+      <div>
+        <h3>Need more games?</h3>
+        <p>Use the existing engines as a template. Each game is just a function that receives the canvas context, so cloning a mode is as simple as duplicating one of the engine blocks in <code>script.js</code>.</p>
+      </div>
+      <div>
+        <h3>Lightweight by design</h3>
+        <p>Fonts are served from Google Fonts, but you can swap to a system font stack if you need completely offline deployment. All other assets are plain CSS and JavaScript.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Built for students who need a quiet, self-hosted arcade. Have fun & stay kind.</p>
+  </footer>
+
+  <div class="modal hidden" id="gameModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-content">
+      <button class="close" data-close aria-label="Close dialog">×</button>
+      <div class="modal-header">
+        <p id="modalTagline" class="eyebrow"></p>
+        <h2 id="modalTitle"></h2>
+        <p id="modalDescription" class="muted"></p>
+      </div>
+      <div class="score-panel">
+        <div>
+          <span class="label">Score</span>
+          <strong id="scoreValue">0</strong>
+        </div>
+        <div>
+          <span class="label">Best</span>
+          <strong id="bestValue">0</strong>
+        </div>
+        <div>
+          <span class="label">Status</span>
+          <strong id="statusValue">Ready</strong>
+        </div>
+      </div>
+      <div class="canvas-wrapper">
+        <canvas id="gameCanvas" width="480" height="360" tabindex="0" role="img" aria-label="Active mini game"></canvas>
+      </div>
+      <div class="modal-footer">
+        <h3>Controls</h3>
+        <ul id="controlList"></ul>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
