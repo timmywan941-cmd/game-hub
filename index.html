@@ -6,16 +6,24 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="header">
+
+  <header>
     <h1>My Game Hub</h1>
-    <input id="search" type="text" placeholder="Search games...">
   </header>
 
-  <main class="layout">
-    <!-- LEFT SIDE: GAME LIST -->
-    <section class="game-list" id="game-list">
+  <main class="container">
 
-      <!-- TEST GAME 1 -->
+    <section class="game-list">
+      
+      <!-- Xmas Cookie Clicker -->
+      <div class="game-card" data-title="Xmas Cookie Clicker" data-tags="cookie xmas clicker freezenova">
+        <h2>Xmas Cookie Clicker</h2>
+        <button class="play-btn" data-url="https://unblocked-games.s3.amazonaws.com/xmas-cookie-clicker.html">
+          Play
+        </button>
+      </div>
+
+      <!-- Test Game -->
       <div class="game-card" data-title="Test Game" data-tags="test demo">
         <h2>Test Game</h2>
         <button class="play-btn" data-url="game1.html">
@@ -23,31 +31,15 @@
         </button>
       </div>
 
-      <!-- TEST GAME 2 -->
-      <div class="game-card" data-title="Second Test Game" data-tags="test blue demo">
-        <h2>Second Test Game</h2>
-        <button class="play-btn" data-url="game2.html">
-          Play
-        </button>
-      </div>
-
-      <!-- REAL GAME: SLOPE -->
-      <div class="game-card" data-title="Slope" data-tags="3d running ball fast">
-        <h2>Slope</h2>
-        <button class="play-btn"
-          data-url="https://sheeptester.github.io/slope-game/">
-          Play
-        </button>
-      </div>
-
     </section>
 
-    <!-- RIGHT SIDE: GAME VIEWER -->
     <section class="viewer">
-      <iframe id="game-frame" src="" frameborder="0" allowfullscreen></iframe>
+      <iframe id="game-frame"></iframe>
     </section>
+
   </main>
 
   <script src="script.js"></script>
+
 </body>
 </html>
