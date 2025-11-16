@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Neon Runner</title>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #05060d, #0d1224 60%);
+      color: #fdfdfd;
+      font-family: 'Inter', system-ui, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 16px;
+    }
+    canvas {
+      background: repeating-linear-gradient(90deg, rgba(255,255,255,0.02) 0, rgba(255,255,255,0.02) 20px, transparent 20px, transparent 40px);
+      border-radius: 20px;
+      border: 2px solid rgba(255,255,255,0.1);
+      width: min(720px, 90vw);
+      height: auto;
+      aspect-ratio: 3 / 1.5;
+    }
+    .hud {
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      font-size: 0.9rem;
+      display: flex;
+      gap: 20px;
+    }
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 10px 20px;
+      background: #f97316;
+      color: #05060d;
+      font-weight: 700;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Neon Runner</h1>
+  <p>Press space or tap to jump the glowing walls.</p>
+  <canvas id="game" width="720" height="360"></canvas>
+  <div class="hud">
+    <span>Score: <strong id="score">0</strong></span>
+    <button id="restart">Restart</button>
+  </div>
+  <script>
+    const canvas = document.getElementById('game');
+    const ctx = canvas.getContext('2d');
+    const player = { x: 80, y: 260, size: 32, vy: 0, grounded: true };
+    const gravity = 0.7;
+    const obstacles = [];
+    let score = 0;
+    let speed = 4;
+    let running = true;
+
+    function spawnObstacle() {
+      const height = 40 + Math.random() * 120;
+      obstacles.push({ x: canvas.width + 40, width: 20 + Math.random() * 30, height });
+    }
+
+    let spawnTimer = 0;
+    function update(delta) {
+      if (!running) return;
+      player.vy += gravity;
+      player.y += player.vy;
+      if (player.y >= canvas.height - player.size - 40) {
+        player.y = canvas.height - player.size - 40;
+        player.vy = 0;
+        player.grounded = true;
+      }
+
+      spawnTimer += delta;
+      if (spawnTimer > 1100) {
+        spawnObstacle();
+        spawnTimer = 0;
+      }
+
+      obstacles.forEach(ob => {
+        ob.x -= speed;
+      });
+
+      while (obstacles.length && obstacles[0].x + obstacles[0].width < 0) {
+        obstacles.shift();
+        score++;
+        document.getElementById('score').textContent = score;
+        speed = Math.min(10, speed + 0.1);
+      }
+
+      obstacles.forEach(ob => {
+        if (player.x < ob.x + ob.width &&
+            player.x + player.size > ob.x &&
+            player.y + player.size > canvas.height - ob.height - 40) {
+          running = false;
+        }
+      });
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#070a16';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = '#10152b';
+      ctx.fillRect(0, canvas.height - 40, canvas.width, 40);
+
+      ctx.fillStyle = '#4fd1c5';
+      ctx.shadowBlur = 20;
+      ctx.shadowColor = '#4fd1c5';
+      ctx.fillRect(player.x, player.y, player.size, player.size);
+      ctx.shadowBlur = 0;
+
+      ctx.fillStyle = '#f472b6';
+      obstacles.forEach(ob => {
+        ctx.fillRect(ob.x, canvas.height - ob.height - 40, ob.width, ob.height);
+      });
+
+      if (!running) {
+        ctx.fillStyle = 'rgba(5,6,13,0.75)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#fff';
+        ctx.textAlign = 'center';
+        ctx.font = 'bold 32px Inter';
+        ctx.fillText('Crashed! Tap restart.', canvas.width / 2, canvas.height / 2);
+      }
+    }
+
+    let last = 0;
+    function loop(timestamp) {
+      const delta = timestamp - last;
+      last = timestamp;
+      update(delta);
+      draw();
+      requestAnimationFrame(loop);
+    }
+
+    function jump() {
+      if (!running) return;
+      if (player.grounded) {
+        player.vy = -13;
+        player.grounded = false;
+      }
+    }
+
+    window.addEventListener('keydown', e => {
+      if (e.code === 'Space') {
+        e.preventDefault();
+        jump();
+      }
+    });
+    window.addEventListener('pointerdown', jump);
+
+    document.getElementById('restart').addEventListener('click', () => {
+      obstacles.length = 0;
+      score = 0;
+      speed = 4;
+      running = true;
+      player.y = 260;
+      player.vy = 0;
+      document.getElementById('score').textContent = score;
+    });
+
+    requestAnimationFrame(loop);
+  </script>
+</body>
+</html>
