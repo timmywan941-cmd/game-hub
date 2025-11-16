@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Memory Flip</title>
+  <style>
+    body {
+      margin: 0;
+      background: linear-gradient(145deg, #0f172a, #020617);
+      min-height: 100vh;
+      color: #f8fafc;
+      font-family: 'Inter', system-ui, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 16px;
+      padding: 24px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(70px, 90px));
+      gap: 14px;
+      justify-content: center;
+    }
+    button.card {
+      width: 90px;
+      height: 90px;
+      border-radius: 16px;
+      border: none;
+      background: #111827;
+      color: transparent;
+      font-size: 2rem;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.3s ease, color 0.2s ease;
+      box-shadow: 0 8px 25px rgba(15, 23, 42, 0.6);
+    }
+    button.card.revealed,
+    button.card.matched {
+      background: #4f46e5;
+      color: #f8fafc;
+      transform: scale(1.05);
+    }
+    button.card.matched {
+      background: #0ea5e9;
+    }
+    .hud {
+      display: flex;
+      gap: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 0.85rem;
+    }
+    #status {
+      min-height: 24px;
+    }
+    .actions {
+      display: flex;
+      gap: 10px;
+    }
+    .actions button {
+      border-radius: 999px;
+      border: none;
+      padding: 10px 16px;
+      background: #f97316;
+      color: #0f172a;
+      font-weight: 700;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Memory Flip</h1>
+  <p>Flip the cards, match the icons, and clear the board.</p>
+  <div class="hud">
+    <span>Moves: <strong id="moves">0</strong></span>
+    <span>Best: <strong id="best">--</strong></span>
+  </div>
+  <div class="grid" id="grid"></div>
+  <div id="status"></div>
+  <div class="actions">
+    <button id="reset">New board</button>
+  </div>
+  <script>
+    const icons = ['🌙','⭐️','⚡️','🔥','🍀','🌸','🎧','🪐'];
+    let board = [];
+    let picks = [];
+    let moves = 0;
+    const best = localStorage.getItem('memory-best');
+    if (best) document.getElementById('best').textContent = best;
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    function buildBoard() {
+      board = shuffle([...icons, ...icons]).map((icon, index) => ({
+        id: index,
+        icon,
+        matched: false
+      }));
+      moves = 0;
+      document.getElementById('moves').textContent = moves;
+      document.getElementById('status').textContent = '';
+      const grid = document.getElementById('grid');
+      grid.innerHTML = '';
+      board.forEach(tile => {
+        const button = document.createElement('button');
+        button.className = 'card';
+        button.dataset.id = tile.id;
+        button.addEventListener('click', () => flip(tile, button));
+        grid.appendChild(button);
+      });
+    }
+
+    function flip(tile, button) {
+      if (tile.matched || picks.some(p => p.id === tile.id)) return;
+      if (picks.length === 2) return;
+      button.textContent = tile.icon;
+      button.classList.add('revealed');
+      picks.push({ tile, button });
+      if (picks.length === 2) {
+        moves++;
+        document.getElementById('moves').textContent = moves;
+        checkMatch();
+      }
+    }
+
+    function checkMatch() {
+      const [first, second] = picks;
+      if (first.tile.icon === second.tile.icon) {
+        first.tile.matched = second.tile.matched = true;
+        first.button.classList.add('matched');
+        second.button.classList.add('matched');
+        picks = [];
+        if (board.every(tile => tile.matched)) {
+          document.getElementById('status').textContent = 'Perfect memory!';
+          const best = localStorage.getItem('memory-best');
+          if (!best || moves < best) {
+            localStorage.setItem('memory-best', moves);
+            document.getElementById('best').textContent = moves;
+          }
+        }
+      } else {
+        setTimeout(() => {
+          first.button.textContent = '';
+          second.button.textContent = '';
+          first.button.classList.remove('revealed');
+          second.button.classList.remove('revealed');
+          picks = [];
+        }, 700);
+      }
+    }
+
+    document.getElementById('reset').addEventListener('click', buildBoard);
+    buildBoard();
+  </script>
+</body>
+</html>

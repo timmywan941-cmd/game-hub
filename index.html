@@ -2,55 +2,87 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>My Game Hub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arcadium — Unblocked Games Hub</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-  <header>
-    <h1>My Game Hub</h1>
-  </header>
-
-  <main class="container">
-
-    <section class="game-list">
-
-      <!-- Xmas Cookie Clicker -->
-      <div class="game-card" data-title="Xmas Cookie Clicker" data-tags="cookie xmas clicker freezenova">
-        <h2>Xmas Cookie Clicker</h2>
-        <button class="play-btn"
-                data-url="https://unblocked-games.s3.amazonaws.com/xmas-cookie-clicker.html">
-          Play
-        </button>
+  <div class="site-shell">
+    <header class="hero">
+      <div class="hero-text">
+        <p class="eyebrow">Unblocked • Classroom friendly • Fast loading</p>
+        <h1>Arcadium</h1>
+        <p class="tagline">
+          A curated shelf of classroom-safe unblocked games inspired by Syce's Game Shack.
+          Search, filter, and instantly launch games inside the built-in frame or in a new tab
+          for easy embedding on Google Sites.
+        </p>
+        <p class="system-note">
+          ✅ Four mini games (Snake, Runner, Shooter, Memory) are bundled right inside this repo, so
+          the viewer always has something to play even when outside mirrors get blocked.
+        </p>
       </div>
+      <div class="hero-controls">
+        <label class="search-label" for="search-input">Search the library</label>
+        <input id="search-input" type="search" placeholder="Try 'retro', 'football', 'platformer'…" />
 
-      <!-- Retro Bowl -->
-      <div class="game-card" data-title="Retro Bowl" data-tags="football retro sports">
-        <h2>Retro Bowl</h2>
-        <button class="play-btn"
-                data-url="https://retro-bowlgames.github.io/">
-          Play
-        </button>
+        <div class="control-row">
+          <div class="select-group">
+            <label for="sort-select">Sort</label>
+            <select id="sort-select">
+              <option value="featured">Featured</option>
+              <option value="az">A → Z</option>
+              <option value="newest">Newest</option>
+            </select>
+          </div>
+          <button id="clear-btn" class="ghost-btn" type="button">Reset filters</button>
+        </div>
+
+        <div class="tag-panel">
+          <span class="panel-label">Popular tags</span>
+          <div id="tag-filters" class="tag-filters"></div>
+        </div>
       </div>
+    </header>
 
-      <!-- Halloween Hop -->
-      <div class="game-card" data-title="Halloween Hop" data-tags="halloween hop platformer">
-        <h2>Halloween Hop</h2>
-        <button class="play-btn"
-                data-url="https://www.noflashgame.com/html5-36/halloween-hop-unblocked-1420/">
-          Play
-        </button>
-      </div>
+    <main class="layout">
+      <section class="game-panel" aria-live="polite">
+        <div id="game-count" class="game-count">Loading games…</div>
+        <div id="game-list" class="game-list" role="list"></div>
+      </section>
 
+      <section class="viewer" aria-label="Game viewer">
+        <div id="viewer-placeholder" class="viewer-placeholder">
+          <h2>No game selected</h2>
+          <p>Select one of the <strong>Built-in</strong> titles to guarantee instant gameplay, or try a
+            mirror if your network allows it. Either way, you can pop the game into a new tab for Google
+            Sites embeds.</p>
+        </div>
+        <iframe id="game-frame" title="Embedded game" loading="lazy" allowfullscreen
+          allow="autoplay; fullscreen; gamepad *; xr-spatial-tracking"></iframe>
+      </section>
+    </main>
+
+    <section class="deploy-card" aria-label="GitHub Pages deployment guide">
+      <h2>Host it on GitHub Pages (no Python server needed)</h2>
+      <ol>
+        <li>Create a new repository named whatever you like and upload these three files.</li>
+        <li>Keep the included <code>.github/workflows/deploy.yml</code> file so GitHub knows how to publish the site.</li>
+        <li>Push to <code>main</code> and GitHub Pages will automatically build the static site at
+          <span class="inline-code">https://&lt;username&gt;.github.io/&lt;repo&gt;/</span> for you to embed anywhere.</li>
+      </ol>
+      <p class="deploy-tip">Bonus: the four featured games live inside this repo, so GitHub Pages always serves playable
+        content—even if a mirror gets blocked at school.</p>
     </section>
 
-    <section class="viewer">
-      <iframe id="game-frame"></iframe>
-    </section>
-
-  </main>
+    <footer>
+      <p>
+        Tip: On Google Sites, add an "Embed" block and paste the URL of this page or the direct game link.
+        All listed games are HTML5-friendly and hosted on HTTPS mirrors for classroom access.
+      </p>
+    </footer>
+  </div>
 
   <script src="script.js"></script>
-
 </body>
 </html>
